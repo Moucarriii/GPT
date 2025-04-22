@@ -1,9 +1,27 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import numpy as np
 
-# Load the dataset
-df = pd.read_csv("ecommerce_store_2024.csv")  # Save the DataFrame above as this file
+# --- Generate the dataset directly in the app ---
+months = pd.date_range(start='2024-01-01', end='2024-12-01', freq='MS').strftime('%B')
+categories = ['Electronics', 'Clothing', 'Home & Kitchen']
+
+np.random.seed(42)
+data = []
+for month in months:
+    for category in categories:
+        sales = np.random.randint(20000, 50000)
+        profit_margin = np.random.uniform(0.1, 0.3)
+        profit = round(sales * profit_margin)
+        visitors = np.random.randint(5000, 15000)
+        conversion_rate = np.random.uniform(0.02, 0.05)
+        orders = round(visitors * conversion_rate)
+        data.append([month, category, sales, profit, visitors, orders])
+
+df = pd.DataFrame(data, columns=[
+    'Month', 'Category', 'Sales ($)', 'Profit ($)', 'Website Visitors', 'Orders'
+])
 
 # Streamlit App
 st.title("E-commerce Store 2024 Performance Dashboard")
